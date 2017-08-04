@@ -1,23 +1,29 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-import static model.modelutils.Preconditions.checkArgument;
-
 /**
- * Created by eglushchenko on 02.08.2017.
+ * Created by EGlushchenko on 27.07.2017.
  */
-public abstract class TUTDFEntry {
-    private final List<IDSegment> idSegmentList;
-    private final List<PhoneNumberSegment> phoneNumberSegmentList;
+public class TUTDFEntry {
+    private final LinkedHashMap<SegmentTag, List<ISegment>> segments;
 
-    // one of TR/LE/BK/BC/IP
-    private final Segment switchSegment;
+    public TUTDFEntry(LinkedHashMap<SegmentTag, List<ISegment>> segments) {
+        this.segments = segments;
+    }
 
-    public TUTDFEntry(List<IDSegment> idSegmentList, List<PhoneNumberSegment> phoneNumberSegmentList, Segment switchSegment) {
-        checkArgument(!idSegmentList.isEmpty(), " There must be at least one IDSegment!");
-        this.idSegmentList = idSegmentList;
-        this.phoneNumberSegmentList = phoneNumberSegmentList;
-        this.switchSegment = switchSegment;
+    public ISegment getSegment(SegmentTag tag, int i){
+        return segments.get(tag).get(i);
+    }
+
+    public ISegment[] getAllSegments(){
+        ArrayList<ISegment> result = new ArrayList<>();
+        for(List<ISegment> segmentsList : segments.values()){
+            result.addAll(segmentsList);
+        }
+        ISegment[] out = new ISegment[result.size()];
+        return result.toArray(out);
     }
 }
